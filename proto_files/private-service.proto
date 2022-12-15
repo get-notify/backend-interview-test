@@ -57,11 +57,13 @@ message Book {
   string id = 1 [json_name = "id"];
   string title = 2 [json_name = "title"];
   repeated string authors = 3 [json_name = "authors"]; // Can be empty string array
-  int32 published_date = 4  [json_name = "published_date"];
-  int32 page_count = 5  [json_name = "page_count"];
-  string print_type = 6  [json_name = "print_type"];
   BookImageLinks image_links = 7  [json_name = "image_links"];
+  string print_type = 6  [json_name = "print_type"];
   string language = 8  [json_name = "language"];
+
+  optional int32 published_date = 4  [json_name = "published_date"];
+  optional int32 page_count = 5  [json_name = "page_count"];
+  optional string description = 9  [json_name = "description"];
 }
 
 message BookImageLinks {
