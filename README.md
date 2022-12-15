@@ -10,7 +10,7 @@
 
 - Not a requirement, but will be good to see if possible:
   - Use of https://github.com/swaggo/swag and a public swagger documentation
-  - The dockerfile with the `PostgresSQl` and services
+  - The dockerfile with the `PostgresSQl`, `service` and `apis`
 
 # Details
 
