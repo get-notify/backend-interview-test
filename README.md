@@ -1,4 +1,4 @@
-# The Backend Netzsch Interview Test
+# The Backend Interview Test - NETZSCH
 
 - What we will see?
   - Clean code
@@ -10,18 +10,15 @@
 
 - Not a requirement, but will be good to see if possible:
   - Use of https://github.com/swaggo/swag and a public swagger documentation
-  - The dockerfile with the `PostgresSQl`, `service` and `apis`
+  - The Docker file with the `PostgresSQl`, `service`, and `APIs`
 
 # Details
 
-One of ours customers buyed a TVBox display, who can call apis and display some books, a random book need to be 
-displayed at the TVBox with the last book displayed (except at the first api request), the TVBox
-will send this in a interval of `1m`, the customer wants every next book not to be among the last `10` books displayed.
+One of our customers bought a TVBox display, which can call APIs and display some books, a random book need to be displayed at the TVBox with the last book displayed (except at the first API request), and the TVBox will send this in an interval of `1m`, the customer wants every next book not to be among the last `10` books displayed.
 
-- The customer will send a request to our public service, and we need provide some books about "_Dungeon&Dragons_" to be 
-  displayed at a TVBox at the company reception
-  - He sent to us a list of the books he need (see [create_database.sql](./_sql_scripts/create_database.sql))
-- The customer will need one public api with a `hash` authentication at the request header, just for authentication
+- The customer will send a request to our public service, and we need to provide some books about "_Dungeon&Dragons_" to be displayed on a TVBox at the company reception
+  - He sent to us a list of the books he needs (see [create_database.sql](./_sql_scripts/create_database.sql))
+- The customer will need one public API with a `hash` authentication at the request header, just for authentication
 
 # Architecture
 
@@ -33,7 +30,7 @@ will send this in a interval of `1m`, the customer wants every next book not to 
 // +-------------+           |             |               |               |       
 // |             |           |             |               |               |       +---------------+
 // |    User     |           |             |               |    Private    |       |               |
-// |             |<----------|   Publi     |<--------------|      API      |------>|    Database   |
+// |             |<----------|   Public    |<--------------|      API      |------>|    Database   |
 // |             +---------->|             +-------------->|               |<------|               |
 // |             |           |    Api      |      GRPC     |     GRPC      |       +---------------+
 // |             |           |             |               |     only      |       
@@ -42,27 +39,28 @@ will send this in a interval of `1m`, the customer wants every next book not to 
 //                           +-------------+               +---------------+       
 ```
 
-- Create a user hash to use at `body` header
+- Create a user hash to use at the `body` header
   - Key: `Api-Key` - Type: `string`
 
-### Public Api
+### Public API
 
-- Each endpoint will need to be validated the Authentication Key given in the request header
+- Each endpoint will need to be validated with the Authentication Key given in the request header
 
 #### GET - Create a simple endpoint to return the random book and the latest book displayed
-  - The first book displayed don't need to have a `latest_book`
-  - The public-api will call Private Api GRPC service
+  - The first book displayed doesn’t need to have a latest_book
+  - The public-api will call the Private API GRPC service
+
 #### GET - Create a simple endpoint to return the details from a book by the id
-  - The public-api will call Private Api GRPC service
-  
+  - The public-api will call the Private API GRPC service
+
 ### Service API
-You can generate the service with the [private-service.proto](proto_files/private-service.proto) file  
+You can generate the service with the [private-service.proto](proto_files/private-service.proto) file
 
 #### GRPC - Create a simple endpoint to return the random book and the latest book displayed
 
 - Get the next random book
-  - Update the flag `actual_book` to `true` to the selected book
-  - Update the flag `actual_book` to `false` to the all other books
+  - Update the flag `actual_book` to `true` for the selected book
+  - Update the flag `actual_book` to `false` for all other books
   - Make sure the book are not in the latest 10 books.
 - If is the first call, the `latest_book` can be empty
 
@@ -70,7 +68,7 @@ You can generate the service with the [private-service.proto](proto_files/privat
 
 - Get one book by `book_id` from the database the book details and return it.
 
-# Api Requests
+# API Requests
 
 - Request:
 
